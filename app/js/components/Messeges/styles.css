@@ -1,4 +1,58 @@
 .messegesContainer {
   flex: 2;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #2F3C47;
+}
+
+.messegesWrapper {
+  flex: 4;
+  background-color: #ccc;
+}
+
+.typeMessege {
+  position: absolute;
+  color: #ccc;
+  z-index: 0;
+}
+
+.textArea {
+  outline: none;
+  z-index: 1;
+  position: relative;
+}
+
+.inputWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+.formWrapper {
+  display: flex;
+  flex-direction: row;
+	overflow: hidden;
+}
+
+.input {
+  flex: 1;
+  padding: 9px;
+}
+
+.addPhotoWrapper {
+  height: 45px;
+  width: 45px;
+}
+
+.addPhotoButton {
+
+}
+
+.inputImg {
+  width: 45px;
+  height: 45px;
+  z-index: 1;
+  opacity: 0;
+  position: absolute;
+  right: 0;
 }
