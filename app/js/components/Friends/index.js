@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {List} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
+import CircularProgress from 'material-ui/CircularProgress';
 import Friend from './Friend';
 import './styles.css';
 
@@ -12,7 +13,7 @@ export default class Friends extends Component {
   }
 
   startChat (id) {
-    console.log(id);
+    this.props.changeUser(id);
   }
 
   renderFriend (friend) {
@@ -32,7 +33,7 @@ export default class Friends extends Component {
       <div className='friendsContainer'>
         <List>
           <Subheader>Recent chats</Subheader>
-          {friends.map(this.renderFriend.bind(this))}
+          {!friends ? <CircularProgress /> : friends.map(this.renderFriend.bind(this))}
         </List>
       </div>
     );

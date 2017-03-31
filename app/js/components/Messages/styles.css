@@ -1,0 +1,146 @@
+.messagesContainer {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #2F3C47;
+  overflow: hidden;
+}
+
+.messagesWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  flex: 4;
+  background-color: #ccc;
+}
+
+.messages {
+  overflow: scroll;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.messageWrapper {
+  margin-bottom: 10px;
+}
+
+.message {
+  word-wrap: break-word;
+  overflow: hidden;
+  max-width: 50%;
+  font-family: openSansLight;
+  border-radius: 20px;
+}
+
+.fileButton {
+  max-width: 50%;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  outline: none;
+  overflow: hidden;
+}
+
+.fileButton:hover .fileButton::before {
+  content: '';
+  z-index: 1;
+  background: linear-gradient(rgba(255, 255, 255, 0.28), rgba(0, 0, 0, 0.64));
+}
+
+.file {
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+.right {
+  border-top-right-radius: 5px;
+  float: right;
+  background-color: #17AB9F;
+  box-shadow: 0 0 10px #17AB9F;
+}
+
+.left {
+  border-top-left-radius: 5px;
+  float: left;
+  background-color: #2F3C47;
+  box-shadow: 0 0 10px #2F3C47;
+}
+
+.fileMessage {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.messageContent {
+  padding: 6px 12px;
+}
+
+.messageText {
+  color: #fff;
+}
+
+.typeMessege {
+  font-family: openSansLight;
+  position: absolute;
+  color: #ccc;
+  z-index: 0;
+}
+
+.textArea {
+  font-family: openSansLight;
+  outline: none;
+  z-index: 1;
+  position: relative;
+}
+
+.inputWrapper {
+  overflow: scroll;
+  max-height: 25%;
+  max-width: 100%;
+  border-top: 1px solid #2F3C47;
+  padding: 5px;
+}
+
+.inputContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.formWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+	overflow: hidden;
+}
+
+.input {
+  max-width: 100%;
+  overflow: scroll;
+  flex: 1;
+  padding: 9px;
+}
+
+.addPhotoWrapper {
+  height: 45px;
+  width: 45px;
+}
+
+.addPhotoButton {
+
+}
+
+.inputImg {
+  cursor: pointer;
+  width: 45px;
+  height: 45px;
+  z-index: 1;
+  opacity: 0;
+  outline: none;
+  position: absolute;
+}

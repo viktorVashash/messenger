@@ -12,7 +12,12 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
+}
+
+.userName {
   color: #fff;
+  font-family: OpenSansLight;
+  margin-left: 10px;
 }
 
 .titleWrapper {
