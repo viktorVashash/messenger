@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import IconButton from 'material-ui/IconButton';
-import Divider from 'material-ui/Divider';
-import AddNewPhoto from 'material-ui/svg-icons/content/add';
+import ReactDOM from 'react-dom';
+import PhotoModal from './PhotoModal';
+import Messages from './Messages';
 import Message from './Message';
+import Input from './Input';
 import './styles.css';
 
 export default class Messeges extends Component {
@@ -13,54 +14,61 @@ export default class Messeges extends Component {
       message: '',
       data_uri: '',
       filename: '',
-      filetype: ''
+      filetype: '',
+      modal: false
     }
 
-    this.handleFile = this.handleFile.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleFile = this.handleFile.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleMessage = this.handleMessage.bind(this);
+    this.openPhoto = this.openPhoto.bind(this);
   }
 
-  componentWillMount () {
-     window.addEventListener('scroll', this.handleScroll);
-  }
-
-  onScroll () {
-    console.log('scroll');
+  openPhoto (uri) {
+    this.setState({
+      modal: !this.state.modal,
+      data_uri: uri
+    });
   }
 
   handleSubmit (event) {
-    const self = this;
     if (event.key === 'Enter') {
       event.preventDefault();
       event.target.textContent = '';
+
       const data = {
-        mid: this.props.messages.length + 1,
+        mid: this.props.messages.length,
         sender: 0,
         message: this.state.message
-      }
+      };
+
       this.props.addMessage(data);
       this.setState({
         message: ''
-      })
-    } else if (event.key === 'file') {
+      });
+    } else if (event === 'file') {
       const {data_uri, filename, filetype} = this.state;
+      const fileName = filename.slice(0, -4);
+      const fileType = filetype.substring(0, 5);
+
       const data = {
-        mid: this.props.messages.length + 1,
+        mid: this.props.messages.length,
         sender: 0,
         file: {
           data_uri,
-          filename,
-          filetype
+          filename: fileName,
+          filetype: fileType
         }
-      }
+      };
+
       this.props.addMessage(data);
     }
   }
 
-  handleMessege (event) {
+  handleMessage (event) {
     this.setState({
       message: event.target.textContent
-    })
+    });
   }
 
   handleFile (event) {
@@ -74,47 +82,23 @@ export default class Messeges extends Component {
         filetype: file.type
       });
 
-      const e = {
-        key: 'file'
-      }
+      const key = 'file';
 
-      this.handleSubmit(e);
+      this.handleSubmit(key);
     };
 
     reader.readAsDataURL(file);
   }
 
-  renderMessages (message) {
-    return (
-      <Message key={message.mid} message={message} />
-    );
-  }
-
   render () {
-    const {messages} = this.props;
+    const {messages, friend} = this.props;
 
     return (
-      <div className='messagesContainer'>
-        <div className='messagesWrapper'>
-          <div className='messages'>
-          {messages.map(this.renderMessages.bind(this))}
-        </div>
-        </div>
-        <div className='inputWrapper'>
-          <form onKeyDown={this.handleSubmit} className='inputContainer'>
-            <div className='input'>
-              {!this.state.message && <div className='typeMessege'>Type a messege...</div>}
-              <div id='textArea' onInput={this.handleMessege.bind(this)} className='textArea' contentEditable={true}>{this.state.messege}</div>
-            </div>
-            <div className='addPhotoWrapper'>
-              <div className='formWrapper'>
-                <IconButton className='addPhotoButton'><AddNewPhoto /></IconButton>
-                <input onChange={this.handleFile} className='inputImg' type='file' />
-              </div>
-            </div>
-          </form>
-        </div>
+      <div className='messagesContainer' suppressContentEditableWarning={true}>
+        <PhotoModal openPhoto={this.openPhoto} modal={this.state.modal} img={this.state.data_uri} />
+        <Messages friend={friend} messages={messages} openPhoto={this.openPhoto} />
+        <Input handleSubmit={this.handleSubmit} message={this.state.message} handleMessage={this.handleMessage} handleFile={this.handleFile} />
       </div>
     );
   }
-}
+};

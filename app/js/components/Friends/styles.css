@@ -1,4 +1,36 @@
 .friendsContainer {
   flex: 1;
-  overflow: scroll;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.active {
+	background-color: #2F3C47;
+}
+
+.searchInputContainer {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 1%;
+	max-width: 100%;
+	border-bottom: 1px solid #2F3C47;
+}
+
+.searchInput {
+	box-sizing: border-box;
+	width: 100%;
+	height: 30px;
+	border: none;
+	border-radius: 5px;
+	padding: 5px;
+	background-color: #fff;
+	font-family: openSansLight;
+	color: #2F3C47;
+	outline: none;
+}
+
+.scrollableList {
+	overflow: scroll;
 }

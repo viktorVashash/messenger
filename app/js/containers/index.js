@@ -1,21 +1,15 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Header, Friends, Messages} from '../components/components';
+import {Modal, Header, Friends, Messages} from '../components/components';
 import getUsers from '../actions/index';
-
-function mapDispatchToProps (dispatch) {
-  return {
-    action: bindActionCreators(getUsers, dispatch)
-  }
-}
 
 function mapStateToProps (state) {
   return {
     friends: state.friends,
     messages: state.messages
   }
-}
+};
 
 class Main extends Component {
   constructor (props) {
@@ -24,52 +18,60 @@ class Main extends Component {
     this.state = {
       friend: [],
       messages: [],
-      userId: 1
-    }
+      friend: {},
+      userName: '',
+      modal: true,
+      error: false
+    };
 
     this.changeUser = this.changeUser.bind(this);
     this.addMessage = this.addMessage.bind(this);
+    this.onUsernameType = this.onUsernameType.bind(this);
+    this.saveUsername = this.saveUsername.bind(this);
   }
 
   componentWillMount () {
-    this.props.getUsers();
+    this.getUsers();
   }
 
-  componentDidMount () {
-    this.props.messages.map((message) => {
-      if (message.uid === this.state.userId) {
-        this.setState({
-          messages: message.messages
-        })
-      }
-    })
-  }
+  async getUsers () {
+    await this.props.getUsers();
 
-  changeUser (id) {
     this.props.messages.map((message) => {
-      if (message.uid === id) {
+      if (message.uid === this.props.friends[0].id) {
         this.setState({
           messages: message.messages,
-          userId: id
-        })
+          friend: this.props.friends[0]
+        });
       }
-    })
+    });
+  }
+
+  changeUser (friend) {
+    this.props.messages.map((message) => {
+      if (message.uid === friend.id) {
+        this.setState({
+          messages: message.messages,
+          friend
+        });
+      }
+    });
   }
 
   feedBack () {
-    console.log(this.state.messages);
     const feedBackText = [
       'Hi',
       'Ok',
       'How are you?',
       'Thanks'
     ];
-
+    const messageIndex = Math.floor(Math.random() * feedBackText.length);
+    const message = feedBackText[messageIndex];
     const data = {
-      sender: this.state.userId,
-      message: feedBackText[Math.floor(Math.random() * feedBackText.length)],
-      mid: this.state.messages.length + 1
-    }
+      sender: this.state.friend.id,
+      message,
+      mid: this.state.messages.length
+    };
 
     this.state.messages.push(data);
     this.setState({
@@ -78,7 +80,6 @@ class Main extends Component {
   }
 
   addMessage (data) {
-    console.log(data);
     this.state.messages.push(data);
     this.setState({
       messages: this.state.messages
@@ -87,19 +88,46 @@ class Main extends Component {
     setTimeout(() => this.feedBack(), 2000);
   }
 
+  onUsernameType (event) {
+    this.setState({
+      userName: event.target.value
+    });
+  }
+
+  saveUsername () {
+    if (this.state.userName.length > 2) {
+      this.setState({
+        modal: !this.state.modal
+      });
+    } else {
+      this.setState({
+        error: true
+      });
+    }
+  }
+
   render() {
     const {friends, messages} = this.props;
 
     return(
       <div className='mainContainer'>
-        <Header />
+        {
+          this.state.modal &&
+          <Modal
+            modal={this.state.modal}
+            onUsernameType={this.onUsernameType}
+            saveUsername={this.saveUsername}
+            error={this.state.error}
+          />
+        }
+        <Header userName={this.state.userName} />
         <div className='mainBlock'>
           <Friends friends={friends} changeUser={this.changeUser} />
-          <Messages addMessage={this.addMessage} messages={this.state.messages}/>
+          <Messages addMessage={this.addMessage} messages={this.state.messages} friend={this.state.friend} />
         </div>
       </div>
     );
   }
-}
+};
 
 export default connect(mapStateToProps, {getUsers})(Main);

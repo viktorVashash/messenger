@@ -6,19 +6,35 @@ import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bu
 
 
 export default class Friend extends Component {
-  onFriendClick (id) {
-    this.props.startChat(id)
+  constructor (props) {
+    super(props);
+
+    this.state = {
+      clicked: false
+    };
+  }
+
+  onFriendClick (friend) {
+    this.setState({
+      clicked: !this.state.clicked
+    });
+
+    this.props.startChat(friend);
   }
 
   render () {
-    const {friend} = this.props;
+    const {friend, activeStyle} = this.props;
+    const backgroundColor = activeStyle ? 'active' : '';
+    const color = activeStyle ? '#fff' : '#2F3C47';
 
     return (
-      <div onClick={() => this.onFriendClick(friend.id)}>
+      <div className={backgroundColor} onClick={() => this.onFriendClick(friend)}>
         <ListItem
+          style={{color, fontFamily: 'openSansLight'}}
+          disabled={activeStyle}
           primaryText={`${friend.first_name + ' ' + friend.last_name}`}
           leftAvatar={<Avatar src={friend.avatar} />}
-          rightIcon={<CommunicationChatBubble />}
+          rightIcon={<CommunicationChatBubble color={color} />}
         />
         <Divider />
       </div>

@@ -1,0 +1,33 @@
+.modalContainer {
+	display: flex;
+	flex-direction: column;
+}
+
+.modalHeader {
+	color: #2F3C47;
+	font-family: openSansLight;
+}
+
+.modalForm {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.modalInput {
+	min-width: 50%;
+	font-family: openSansLight;
+	color: #2F3C47;
+	outline: none;
+	padding: 5px;
+}
+
+.modalButton {
+	margin: 20px 0;
+}
+
+.modalError {
+	font-family: openSansLight;
+	color: red;
+}

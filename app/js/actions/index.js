@@ -10,11 +10,4 @@ export default function getUsers () {
     type: CONSTS.GET_USERS,
     payload: request
   };
-}
-
-// export default function startChat (id) {
-//   return {
-//     type: CONSTS.START_CHAT,
-//     payload: id
-//   };
-// }
+};

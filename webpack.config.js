@@ -2,6 +2,7 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: [
+    'babel-polyfill', 
     './app/js/index'
   ],
   output: {
@@ -35,7 +36,7 @@ module.exports = {
     contentBase: './'
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(), // Tell webpack we want hot reloading
+    new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin()
   ]
 };

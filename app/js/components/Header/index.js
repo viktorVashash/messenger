@@ -10,7 +10,7 @@ export default class Header extends Component {
           <Avatar
             src='images/1.jpg'
             size={40} />
-            <h3 className='userName'>FirstName</h3>
+          <h3 className='userName'>{this.props.userName}</h3>
         </div>
         <div className='titleWrapper'>
           <h1 className='headerTitle'>MessageME</h1>
