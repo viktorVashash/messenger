@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import PhotoModal from './PhotoModal';
 import Messages from './Messages';
-import Message from './Message';
 import Input from './Input';
 import './styles.css';
 
@@ -15,6 +14,7 @@ export default class Messeges extends Component {
       data_uri: '',
       filename: '',
       filetype: '',
+      friend: 0,
       modal: false
     }
 
@@ -22,6 +22,23 @@ export default class Messeges extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleMessage = this.handleMessage.bind(this);
     this.openPhoto = this.openPhoto.bind(this);
+  }
+
+  componentWillMount () {
+    this.loadMessages(1);
+  }
+
+  async loadMessages (id) {
+    await this.props.MessagesActions.getMessagesByUserId(id);
+    this.setState({
+      friend: id
+    });
+  }
+
+  componentWillReceiveProps (props) {
+    if (props.friend.id && props.friend.id !== this.state.friend) {
+      this.loadMessages(props.friend.id);
+    }
   }
 
   openPhoto (uri) {
@@ -37,12 +54,19 @@ export default class Messeges extends Component {
       event.target.textContent = '';
 
       const data = {
-        mid: this.props.messages.length,
+        mid: this.props.messages.messages.length,
         sender: 0,
         message: this.state.message
       };
 
-      this.props.addMessage(data);
+      this.props.MessagesActions.addMessage(this.props.messages, data);
+      setTimeout(() => {
+        this.props.MessagesActions.feedBack(this.props.messages);
+        this.setState({
+          message: ''
+        });
+      }, 2000);
+
       this.setState({
         message: ''
       });
@@ -52,7 +76,7 @@ export default class Messeges extends Component {
       const fileType = filetype.substring(0, 5);
 
       const data = {
-        mid: this.props.messages.length,
+        mid: this.props.messages.messages.length,
         sender: 0,
         file: {
           data_uri,
@@ -61,7 +85,17 @@ export default class Messeges extends Component {
         }
       };
 
-      this.props.addMessage(data);
+      this.props.MessagesActions.addMessage(this.props.messages, data);
+      setTimeout(() => {
+        this.props.MessagesActions.feedBack(this.props.messages);
+        this.setState({
+          message: ''
+        });
+      }, 2000);
+
+      this.setState({
+        message: ''
+      });
     }
   }
 
@@ -96,7 +130,7 @@ export default class Messeges extends Component {
     return (
       <div className='messagesContainer' suppressContentEditableWarning={true}>
         <PhotoModal openPhoto={this.openPhoto} modal={this.state.modal} img={this.state.data_uri} />
-        <Messages friend={friend} messages={messages} openPhoto={this.openPhoto} />
+        {messages && <Messages friend={friend} messages={messages.messages} openPhoto={this.openPhoto} />}
         <Input handleSubmit={this.handleSubmit} message={this.state.message} handleMessage={this.handleMessage} handleFile={this.handleFile} />
       </div>
     );

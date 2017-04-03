@@ -10,25 +10,28 @@ export default class Friends extends Component {
     super(props);
 
     this.state = {
-      activeFriend: 1,
-      term: '',
-      friends: []
+      activeFriend: {
+        id: 1
+      },
+      term: ''
     }
 
     this.startChat = this.startChat.bind(this);
     this.searchUpdated = this.searchUpdated.bind(this);
   }
 
-  componentWillReceiveProps () {
-    this.setState({
-      friends: this.props.friends
-    });
+  componentWillMount () {
+    this.getUsers();
+  }
+
+  async getUsers () {
+    await this.props.UsersActions.getUsers();
   }
 
   startChat (friend) {
     this.props.changeUser(friend);
     this.setState({
-      activeFriend: friend.id
+      activeFriend: friend
     });
   }
 
@@ -39,7 +42,7 @@ export default class Friends extends Component {
   }
 
   renderFriend (friend) {
-    const activeStyle = this.state.activeFriend === friend.id;
+    const activeStyle = this.state.activeFriend.id === friend.id;
 
     return (
       <Friend
@@ -52,7 +55,8 @@ export default class Friends extends Component {
   }
 
   render () {
-    const {friends, term} = this.state;
+    const {term} = this.state;
+    const {friends} = this.props;
     let friendsFilter = friends;
 
     if (term.length > 0) {
@@ -64,14 +68,14 @@ export default class Friends extends Component {
     return (
       <div className='friendsContainer'>
         {
-          friends && <SearchBar searchUpdated={this.searchUpdated} />  
+          friends && <SearchBar searchUpdated={this.searchUpdated} />
         }
         <div className='scrollableList'>
           <List style={{padding: 0}}>
             {
-              !friends ? 
+              !friends ?
               <CircularProgress color='#2F3C47' style={{alignSelf: 'center'}} />
-              : 
+              :
               friendsFilter.map(this.renderFriend.bind(this))
             }
           </List>
